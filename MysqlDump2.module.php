@@ -74,8 +74,8 @@ class MysqlDump2 extends CMSModule {
 		if ($config['dbms'] == 'mysql') {
 			return (version_compare(mysql_get_server_info(), "4.1.0", ">=")) ? '--opt --verbose --compatible=mysql40 --default-character-set=utf8' : '--opt --verbose --default-character-set=utf8';
 		} else {
-			$db = cmsms()->GetDb();
-			return (version_compare(mysqli_get_server_info($db->connectionId), "4.1.0", ">=")) ? '--opt --verbose --compatible=mysql40 --default-character-set=utf8' : '--opt --verbose --default-character-set=utf8';
+			$db = cmsms()->GetDb();			
+			return (version_compare(mysqli_get_server_info($db->get_inner_mysql()), "4.1.0", ">=")) ? '--opt --verbose --default-character-set=utf8' : '--opt --verbose --compatible=mysql40 --default-character-set=utf8';
 		}
 	}
 

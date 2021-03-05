@@ -69,8 +69,8 @@ echo $this->StartTabContent();
 			if ($config['dbms'] == 'mysql') {
 				$this->smarty->assign('FORM_running', $this->Lang('FORM_running',mysql_get_server_info(),$this->MySQL_Recommend()));
 			} else {
-				$db = $gCms->GetDb();
-				$this->smarty->assign('FORM_running', $this->Lang('FORM_running',mysqli_get_server_info($db->connectionId),$this->MySQL_Recommend()));
+				$db = $gCms->GetDb();				
+				$this->smarty->assign('FORM_running', $this->Lang('FORM_running',mysqli_get_server_info($db->get_inner_mysql()),$this->MySQL_Recommend()));
 			}
 
 			$this->smarty->assign('FORM_parameters_explained', $this->Lang('FORM_parameters_explained'));
