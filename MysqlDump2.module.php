@@ -50,7 +50,7 @@ class MysqlDump2 extends CMSModule {
 	}
 
 	function GetVersion() {
-		return '1.0';
+		return '1.1';
 	}
 
 	function MinimumCMSVersion() {
