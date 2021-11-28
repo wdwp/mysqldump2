@@ -18,9 +18,8 @@ if ($this->CheckAccess('Create Mysql Dumps')) {
 		$db = cmsms()->GetDb();
 		if ($config['dbms'] == 'mysql') {
 			$tb_prfx = addcslashes(mysql_real_escape_string($config['db_prefix']), "%_"); //escape special characters like  '_'
-		} else {
-			$db = cmsms()->GetDb();
-			$tb_prfx = addcslashes(mysqli_real_escape_string($db->get_inner_mysql(), $config['db_prefix']), "%_"); //escape special characters like  '_'
+		} else {			
+			$tb_prfx = addcslashes($config['db_prefix'], "%_"); //escape special characters like  '_'
 		}
 		$query = 'SHOW TABLES LIKE '.$db->qstr($tb_prfx.'%'); //Get all tables that match prefix
 		$result = $db->Execute($query);

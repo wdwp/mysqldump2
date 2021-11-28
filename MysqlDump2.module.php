@@ -1,7 +1,9 @@
 <?php
+
 /**
  * Fork of Module: Mysql Dump
  * Version: 1.0 - March 2021
+ * Forked by Yuri Haperski (wdwp@ya.ru)
  *
  * Copyright (c) 2006, Walter Wlodarski
  * Contributor: Sofia Hauschildt (http://www.icms.info)
@@ -30,7 +32,8 @@
  * Or read it online: http://www.gnu.org/licenses/licenses.html#GPL
  */
 
-class MysqlDump2 extends CMSModule {
+class MysqlDump2 extends CMSModule
+{
 
 	// Set to true if you want to disable checks on install (default = false)
 	var $no_checks_on_install = false;
@@ -41,52 +44,55 @@ class MysqlDump2 extends CMSModule {
 	// Folder where to backups will be created under admin/ (default = backups)
 	var $backupDirectory = 'backups';
 
-	function GetName() {
+	function GetName()
+	{
 		return 'MysqlDump2';
 	}
 
-	function GetFriendlyName() {
+	function GetFriendlyName()
+	{
 		return $this->Lang('friendlyname');
 	}
 
-	function GetVersion() {
-		return '1.1';
+	function GetVersion()
+	{
+		return '1.2';
 	}
 
-	function MinimumCMSVersion() {
+	function MinimumCMSVersion()
+	{
 		return "2.0";
 	}
 
-	function IsPluginModule() {
+	function IsPluginModule()
+	{
 		return false;
 	}
 
-	function HasAdmin() {
+	function HasAdmin()
+	{
 		return true;
 	}
 
-	function GetAdminDescription() {
+	function GetAdminDescription()
+	{
 		return $this->Lang('admindesc');
 	}
 
-	function MySQL_Recommend() {
-		$config = cmsms()->GetConfig();
-		if ($config['dbms'] == 'mysql') {
-			return (version_compare(mysql_get_server_info(), "4.1.0", ">=")) ? '--opt --verbose --compatible=mysql40 --default-character-set=utf8' : '--opt --verbose --default-character-set=utf8';
-		} else {
-			$db = cmsms()->GetDb();			
-			return (version_compare(mysqli_get_server_info($db->get_inner_mysql()), "4.1.0", ">=")) ? '--opt --verbose --default-character-set=utf8' : '--opt --verbose --compatible=mysql40 --default-character-set=utf8';
-		}
+	function MySQL_Recommend()
+	{
+		return '--opt --verbose --default-character-set=utf8';
 	}
 
-	function Mysql_binaries_locator() {
+	function Mysql_binaries_locator()
+	{
 		//tries to locate mysql binaries's folder
-		switch (strtoupper(substr(PHP_OS, 0,3))) {
+		switch (strtoupper(substr(PHP_OS, 0, 3))) {
 			case 'WIN':
 				$test = trim(@exec('where mysqldump'));
-				if (preg_match('/\\mysqldump\.exe$/',$test)) {
+				if (preg_match('/\\mysqldump\.exe$/', $test)) {
 					# bugfix multiple path
-					$test = explode(' ', rtrim($test,'\\mysqldump.exe'));
+					$test = explode(' ', rtrim($test, '\\mysqldump.exe'));
 					$this->SetPreference('pathtomysqldump', rtrim($test[0], '\\mysqldump.exe'));
 				} else {
 					$testResult = $this->findMysqlBinaries();
@@ -101,12 +107,12 @@ class MysqlDump2 extends CMSModule {
 				break;
 			default:
 				$test = trim(ltrim(@exec('whereis -b mysqldump'), 'mysqldump: '));
-				if (preg_match('/\/mysqldump$/',$test)) {
+				if (preg_match('/\/mysqldump$/', $test)) {
 					# bugfix multiple path
-					$test = explode(' ', rtrim($test,'/mysqldump'));
+					$test = explode(' ', rtrim($test, '/mysqldump'));
 					$this->SetPreference('pathtomysqldump', rtrim($test[0], '/mysqldump'));
 				} else {
-					$test = trim(ltrim(@exec('which mysqldump'),'mysqldump: '));
+					$test = trim(ltrim(@exec('which mysqldump'), 'mysqldump: '));
 					if (preg_match('/\/mysqldump$/', $test)) {
 						$this->SetPreference('pathtomysqldump', rtrim($test, '/mysqldump'));
 					} else {
@@ -117,38 +123,45 @@ class MysqlDump2 extends CMSModule {
 		}
 	}
 
-	function GetAdminSection() {
+	function GetAdminSection()
+	{
 		return 'siteadmin';
 	}
 
-	function VisibleToAdminUser() {
+	function VisibleToAdminUser()
+	{
 		return $this->CheckPermission('Create Mysql Dumps');
 	}
 
-	function InstallPostMessage() {
-		return $this->Lang('postinstall','<img src="../modules/MysqlDump2/icons/document-save-as.png" alt="" width="32" height="32" style="margin-bottom:-8px;margin-right:0.5em;" />');
+	function InstallPostMessage()
+	{
+		return $this->Lang('postinstall', '<img src="../modules/MysqlDump2/icons/document-save-as.png" alt="" width="32" height="32" style="margin-bottom:-8px;margin-right:0.5em;" />');
 	}
 
-	function GetHelp() {
+	function GetHelp()
+	{
 		return $this->Lang('helptext');
 	}
 
-	function GetAuthor() {
+	function GetAuthor()
+	{
 		return 'Walter Wlodarski';
 	}
 
-	function GetChangeLog() {
+	function GetChangeLog()
+	{
 		return $this->Lang('changelog');
 	}
 
-	function ListBackupSets() {
+	function ListBackupSets()
+	{
 		$backupSets = array();
 		$dir = opendir($this->backupDirectory);
 		while ($thisFile = readdir($dir)) {
 			if ($thisFile[0] != '.') {
 				$file_parts = pathinfo($thisFile);
-				if (is_file($this->backupDirectory.'/'.$thisFile) && $file_parts['extension'] == 'sql' && $thisFile != 'index.html') {
-					$backupSets[$thisFile] = $this->backupDirectory.'/'.$thisFile;
+				if (is_file($this->backupDirectory . '/' . $thisFile) && $file_parts['extension'] == 'sql' && $thisFile != 'index.html') {
+					$backupSets[$thisFile] = $this->backupDirectory . '/' . $thisFile;
 				}
 			}
 		}
@@ -157,54 +170,59 @@ class MysqlDump2 extends CMSModule {
 		return $backupSets;
 	}
 
-	function CheckAccess($permission = 'Create Mysql Dumps') {
+	function CheckAccess($permission = 'Create Mysql Dumps')
+	{
 		$access = $this->CheckPermission($permission);
 		if (!$access) {
-			echo '<p style="color:#E41C1C;font-weight:bold;"><img src="../modules/MysqlDump2/icons/dialog-error.png" alt="" width="22" height="22" style="margin-bottom:-8px;margin-right:0.5em;" />'.$this->Lang('needpermission', $permission).'</p>';
+			echo '<p style="color:#E41C1C;font-weight:bold;"><img src="../modules/MysqlDump2/icons/dialog-error.png" alt="" width="22" height="22" style="margin-bottom:-8px;margin-right:0.5em;" />' . $this->Lang('needpermission', $permission) . '</p>';
 			return false;
 		} else {
 			return true;
 		}
 	}
 
-	function suffix_bytes($size) {
+	function suffix_bytes($size)
+	{
 		$count = 0;
-		$format = array('','k','M','G','T','P','E','Z','Y');
-		while (($size/1024) > 1 && $count < 8) {
-			$size = $size/1024;
+		$format = array('', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y');
+		while (($size / 1024) > 1 && $count < 8) {
+			$size = $size / 1024;
 			$count++;
 		}
-		return number_format($size, 0, '', '.').' '.$format[$count];
+		return number_format($size, 0, '', '.') . ' ' . $format[$count];
 	}
 
-	function create_backup_dir() {
-		if (! is_dir($this->backupDirectory)) {
+	function create_backup_dir()
+	{
+		if (!is_dir($this->backupDirectory)) {
 			@mkdir($this->backupDirectory, 0777);
 		}
-		if (! file_exists($this->backupDirectory.'/index.html')) {
-			@touch($this->backupDirectory.'/index.html');
+		if (!file_exists($this->backupDirectory . '/index.html')) {
+			@touch($this->backupDirectory . '/index.html');
 		}
-		if (is_dir($this->backupDirectory) || file_exists($this->backupDirectory.'/index.html')) {
+		if (is_dir($this->backupDirectory) || file_exists($this->backupDirectory . '/index.html')) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	function ReturnAdmin($id, $params, $returnid) {
-		echo $this->CreateFormStart($id, 'defaultadmin',$returnid);
+	function ReturnAdmin($id, $params, $returnid)
+	{
+		echo $this->CreateFormStart($id, 'defaultadmin', $returnid);
 		echo $this->CreateInputSubmit($id, 'return', $this->Lang('Return'));
 		echo $this->CreateFormEnd();
 	}
 
-	function findMysqlBinaries() {
+	function findMysqlBinaries()
+	{
 		$testCases = array(
 			'C:\Program Files\mysql\bin',
 			'C:\Program Files\EasyPHP\mysql\bin',
 			'C:\xampp\mysql\bin'
 		);
 		foreach ($testCases as $testCase) {
-			$test = @exec('"'.$testCase.'" -V');
+			$test = @exec('"' . $testCase . '" -V');
 			if (preg_match('/Ver|Distrib/i', $test)) {
 				return $testCase;
 			}

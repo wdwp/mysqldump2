@@ -66,7 +66,6 @@ $lang['FORM_parameters'] = 'Dump parameters';
 $lang['FORM_running'] = 'You are running MySQL %s.<br />Therefore, we recommend : %s';
 $lang['FORM_parameters_explained'] = '<dt>--opt</dt><dd>Produce a dump file that can be reloaded into a MySQL server quickly. <em>(strongly recommended)</em></dd>
     <dt>--verbose</dt><dd>Display what the program does. <em>(required)</em></dd>
-    <dt>--compatible=mysql40</dt><dd>Produce output that is compatible with older 4.0 servers. <em>(recommended with MySQL 4.1 or newer)</em></dd>
     <dt>--default-character-set=latin1</dt><dd>Use latin1 as the default character set. </dd>';
 $lang['FORM_parameters_help'] = '<a href="http://dev.mysql.com/doc/refman/5.0/en/mysqldump.html" target="_blank">More about mysqldump parameters...</a>';
 $lang['FORM_restore_parameters'] = 'Restore parameters';
@@ -81,4 +80,3 @@ $lang['utmz'] = '156861353.1217483792.13.12.utmccn=(referral)|utmcsr=forum.cmsma
 $lang['utma'] = '156861353.3824783600689563600.1212128768.1213255610.1217483792.13';
 $lang['utmb'] = '156861353';
 $lang['utmc'] = '156861353';
-?>
